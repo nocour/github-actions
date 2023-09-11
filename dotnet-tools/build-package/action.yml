@@ -1,0 +1,24 @@
+name: Build Package
+
+inputs:
+  project-path:
+    required: true
+    description: 'Project path to build.'
+  package-version:
+    required: true
+    description: 'Version of package.'
+  package-version-suffix:
+    required: false
+    description: 'Suffix for version package in non-prod (default: beta).'
+    default: beta
+
+runs:
+  using: 'composite'
+  steps:
+    - run: |
+        if [ ${{github.ref_name}} != "released" ] ; then 
+          export SUFIX=.${{github.run_number}}-${{inputs.package-version-suffix}};
+        fi
+        export BUILD_VERSION=${{inputs.package-version}}$SUFIX
+        dotnet pack ${{inputs.project-path}} --output ./ -p:PackageVersion=$BUILD_VERSION
+      shell: bash

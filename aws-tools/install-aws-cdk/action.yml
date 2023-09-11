@@ -1,0 +1,8 @@
+name: Install AWS-CDK
+description: 'Install latest version of AWS CDK.'
+
+runs:
+  using: 'composite'
+  steps:
+    - run: sudo npm install -g aws-cdk
+      shell: bash

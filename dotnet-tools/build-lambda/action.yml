@@ -1,0 +1,21 @@
+name: Build Lambda Function
+
+inputs:
+  project-path:
+    required: true
+    description: 'Project path to build.'
+  zip-file-name:
+    required: true
+    description: 'Name for file.zip.'
+  function-architecture:
+    required: false
+    description: '(optional) Function architecture -> default:arm64'
+    default: arm64
+
+runs:
+  using: 'composite'
+  steps:
+    - run: |
+        dotnet tool install -g Amazon.Lambda.Tools
+        dotnet-lambda package -pl ${{inputs.project-path}} -c Release -o ./publish-dotnet/${{inputs.zip-file-name}} -farch ${{inputs.function-architecture}}
+      shell: bash

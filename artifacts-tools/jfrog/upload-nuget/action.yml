@@ -1,0 +1,9 @@
+name: Upload Nuget to Jfrog
+
+runs:
+  using: 'composite'
+  steps:
+    - run: |
+        jf config add artifactory-name --artifactory-url https://your-server-artifactory.com/artifactory --access-token ${{env.JFROG_ACCESS_TOKEN}}
+        jf rt upload --server-id artifactory-name "./*.nupkg" pi-nuget-stable-local/${{env.PACKAGE_NAME}}/${{env.PACKAGE_VERSION}}/
+      shell: bash
