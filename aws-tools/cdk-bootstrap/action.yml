@@ -1,0 +1,9 @@
+name: CDK Bootstrap
+
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        sudo npm install -g aws-cdk
+        cdk bootstrap aws://${{env.AWS_ACCOUNT}}/${{env.AWS_REGION}}
+      shell: bash
