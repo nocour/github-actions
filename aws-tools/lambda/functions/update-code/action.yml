@@ -1,5 +1,5 @@
-name: Update code from lambda function
-description: Update code from lambda function by function-name
+name: Update code of lambda function
+description: Update code of lambda function by function-name
 
 inputs:
   function-name:
