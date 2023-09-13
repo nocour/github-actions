@@ -9,6 +9,10 @@ inputs:
     required: false
     description: 'Stack name to deploy.'
     default: ''
+  custom-args:
+    required: false
+    description: 'Custom arguments: "Example: --all"'
+    default: ''
 
 runs:
   using: "composite"
@@ -16,5 +20,5 @@ runs:
     - run: |
         sudo npm install -g aws-cdk
         cd ${{inputs.cdk-app-path}} && npm install
-        cdk deploy ${{inputs.stack-name}} --require-approval never
+        cdk deploy ${{inputs.stack-name}} --require-approval never ${{inputs.custom-args}}
       shell: bash
