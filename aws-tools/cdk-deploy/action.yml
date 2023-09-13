@@ -18,7 +18,7 @@ runs:
   using: "composite"
   steps:
     - run: |
-        sudo bun install -g aws-cdk
+        sudo npm install -g aws-cdk
         cd ${{inputs.cdk-app-path}} && npm install
         cdk deploy ${{inputs.stack-name}} --require-approval never ${{inputs.custom-args}}
       shell: bash
