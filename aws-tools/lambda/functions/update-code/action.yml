@@ -1,11 +1,12 @@
-name: Update code of lambda function
-description: Update code of lambda function by function-name
+name: Update code to lambda function
+description: Update code to lambda function by function-name
+author: nocour
 
 inputs:
   function-name:
     required: true
     description: 'Name of Lambda Function'
-  zip-file:
+  zip-file-name:
     required: true
     description: 'Path of zip file with code.'
 
@@ -13,5 +14,5 @@ runs:
   using: "composite"
   steps:
     - run: |
-        aws lambda update-function-code --function-name ${{inputs.function-name}} --zip-file ${{inputs.zip-file}}
+        aws lambda update-function-code --function-name ${{inputs.function-name}} --zip-file fileb://${{inputs.zip-file}}
       shell: bash
