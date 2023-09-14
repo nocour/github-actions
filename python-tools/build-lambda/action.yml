@@ -1,0 +1,32 @@
+name: Build Lambda Function ARM64
+description: 'Build the package ready for upload to aws lambda function in ARM64 architecture.
+Inputs:
+- (Required) app-path: Path of main folder project.
+- (Optional) requirements-file: Requirements file for pip install (default: requirements.txt).
+- (Optional) zip-file-name: Name for output-file.zip (default: lambda-package.zip).
+'
+author: nocour
+
+inputs:
+  app-path:
+    required: true
+    description: '(Required) Path of main folder project.'
+  requirements-file:
+    required: false
+    description: '(Optional) Requirements file for pip install (default: requirements.txt).'
+    default: requirements.txt
+  zip-file-name:
+    required: false
+    description: '(Optional) Name for output-file.zip (default: lambda-package.zip).'
+    default: lambda-package.zip
+
+runs:
+  using: 'composite'
+  steps:
+    - run: |
+        python -m pip install --upgrade pip
+        pip install -r ${{inputs.requirements-file}} --platform arm64 --only-binary=:all: --target temp-folder
+        cp -r ${{inputs.app-path}} temp-folder/${{inputs.app-path}}
+        cd temp-folder
+        zip -r ../${{inputs.zip-file-name}} .
+      shell: bash
