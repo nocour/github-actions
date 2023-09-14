@@ -1,4 +1,11 @@
 name: Build Lambda Function ARM64
+description: 'Build the package ready for upload to aws lambda function in ARM64 architecture.
+Inputs:
+- (Required) app-path: Path of main folder project.
+- (Optional) requirements-file: Requirements file for pip install (default: requirements.txt).
+- (Optional) zip-file-name: Name for output-file.zip (default: lambda-package.zip).
+'
+author: nocour
 
 inputs:
   app-path:
@@ -6,7 +13,7 @@ inputs:
     description: '(Required) Path of main folder project.'
   requirements-file:
     required: false
-    description: '(Required) Requirements file for pip install (default: requirements.txt)'
+    description: '(Optional) Requirements file for pip install (default: requirements.txt).'
     default: requirements.txt
   zip-file-name:
     required: false
