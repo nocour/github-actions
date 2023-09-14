@@ -14,5 +14,5 @@ runs:
   using: "composite"
   steps:
     - run: |
-        aws lambda update-function-code --function-name ${{inputs.function-name}} --zip-file fileb://${{inputs.zip-file}}
+        aws lambda update-function-code --function-name ${{inputs.function-name}} --zip-file fileb://${{inputs.zip-file-name}}
       shell: bash
