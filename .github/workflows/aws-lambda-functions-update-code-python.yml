@@ -1,0 +1,53 @@
+on:
+  workflow_call:
+    inputs:
+      app-path:
+        required: true
+        type: string
+      root-module-name:
+        required: true
+        type: string
+      function-name:
+        required: true
+        type: string
+      aws-access-key:
+        required: true
+        type: string
+      aws-region:
+        required: true
+        type: string
+      requirements-file:
+        required: false
+        type: string
+        default: requirements.txt
+      zip-file-name:
+        required: false
+        type: string
+        default: lambda-package.zip
+
+    secrets:
+      aws-secret-access-key:
+        required: true
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - uses: nocour/github-actions/python-tools/build-lambda@0.5.1
+        with:
+          app-path: ${{inputs.app-path}}
+          root-module-name: ${{inputs.root-module-name}}
+          requirements-file: ${{inputs.requirements-file}}
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+            aws-access-key-id: ${{inputs.aws-access-key}}
+            aws-secret-access-key: ${{secrets.aws-secret-access-key}}
+            aws-region: ${{inputs.aws-region}}
+      - uses: nocour/github-actions/aws-tools/lambda/functions/update-code@0.5.1
+        with:
+          function-name: ${{inputs.function-name}}
+          zip-file-name: ${{inputs.zip-file-name}}
