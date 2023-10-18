@@ -1,0 +1,18 @@
+name: Update handler to lambda function
+description: Update handler to lambda function by function-name
+author: nocour
+
+inputs:
+  function-name:
+    required: true
+    description: 'Name of Lambda Function'
+  handler:
+    required: true
+    description: 'handler for Lambda Function'
+
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        aws lambda update-function-configuration --function-name ${{inputs.function-name}} --handler ${{inputs.handler}}
+      shell: bash
