@@ -41,7 +41,7 @@ jobs:
       - uses: actions/setup-python@v4.7.1
         with:
           python-version: 3.11.5
-      - uses: nocour/github-actions/python-tools/build-lambda@bugfix/setup-python
+      - uses: nocour/github-actions/python-tools/build-lambda@0.8.0
         with:
           app-path: ${{inputs.app-path}}
           root-module-name: ${{inputs.root-module-name}}
