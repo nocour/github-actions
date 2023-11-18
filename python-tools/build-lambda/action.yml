@@ -28,7 +28,7 @@ runs:
   using: 'composite'
   steps:
     - run: |
-        pip install -r ${{inputs.requirements-file}} --platform arm64 --only-binary=:all: --target temp-folder
+        pip3 install -r ${{inputs.requirements-file}} --only-binary=:all: --target temp-folder
         cp -r ${{inputs.app-path}} temp-folder/${{inputs.root-module-name}}
         cd temp-folder
         zip -r ../${{inputs.zip-file-name}} .
