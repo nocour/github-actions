@@ -24,6 +24,10 @@ on:
         required: false
         type: string
         default: lambda-package.zip
+      pip3-args:
+        required: false
+        type: string
+        default: '--platform arm64'
 
     secrets:
       aws-secret-access-key:
@@ -42,6 +46,7 @@ jobs:
           app-path: ${{inputs.app-path}}
           root-module-name: ${{inputs.root-module-name}}
           requirements-file: ${{inputs.requirements-file}}
+          pip3-args: ${{inputs.pip3-args}}
       - uses: aws-actions/configure-aws-credentials@v4
         with:
             aws-access-key-id: ${{inputs.aws-access-key}}

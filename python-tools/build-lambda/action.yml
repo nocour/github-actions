@@ -23,12 +23,16 @@ inputs:
     required: false
     description: '(Optional) Name for output-file.zip (default: lambda-package.zip).'
     default: lambda-package.zip
+  pip3-args:
+    required: false
+    description: '(Optional) custom arguments for pip3 install (default: --platform arm64).'
+    default: --platform arm64
 
 runs:
   using: 'composite'
   steps:
     - run: |
-        pip3 install -r ${{inputs.requirements-file}} --only-binary=:all: --target temp-folder
+        pip3 install -r ${{inputs.requirements-file}} --only-binary=:all: --target temp-folder ${{inputs.pip3-args}}
         cp -r ${{inputs.app-path}} temp-folder/${{inputs.root-module-name}}
         cd temp-folder
         zip -r ../${{inputs.zip-file-name}} .
