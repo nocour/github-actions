@@ -28,7 +28,6 @@ runs:
   using: 'composite'
   steps:
     - run: |
-        python -m pip install --upgrade pip
         pip install -r ${{inputs.requirements-file}} --platform arm64 --only-binary=:all: --target temp-folder
         cp -r ${{inputs.app-path}} temp-folder/${{inputs.root-module-name}}
         cd temp-folder
