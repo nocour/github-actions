@@ -1,0 +1,18 @@
+name: Sync S3 Bucket
+description: Sync files from local to S3 Bucket
+author: nocour
+
+inputs:
+  bucket-name:
+    required: true
+    description: 'Name of S3 Bucket'
+  local-folder:
+    required: true
+    description: 'Path to local folder'
+
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        aws s3 sync ${{inputs.local-folder}} ${{inputs.bucket-name}}
+      shell: bash
