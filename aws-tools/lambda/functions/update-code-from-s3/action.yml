@@ -1,0 +1,21 @@
+name: Update code to lambda function
+description: Update code to lambda function by function-name
+author: nocour
+
+inputs:
+  function-name:
+    required: true
+    description: 'Name of Lambda Function'
+  bucket-name:
+    required: true
+    description: 'Name of Bucket'
+  object-key:
+    required: true
+    description: 'Name of object .zip (full path)'
+
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        aws lambda update-function-code --function-name ${{inputs.function-name}} --s3-bucket ${{inputs.bucket-name}} --s3-key ${{inputs.object-key}}
+      shell: bash

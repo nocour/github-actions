@@ -1,0 +1,73 @@
+on:
+  workflow_call:
+    inputs:
+      app-path:
+        required: true
+        type: string
+      root-module-name:
+        required: true
+        type: string
+      function-name:
+        required: true
+        type: string
+      aws-access-key:
+        required: true
+        type: string
+      aws-region:
+        required: true
+        type: string
+      requirements-file:
+        required: false
+        type: string
+        default: requirements.txt
+      zip-file-name:
+        required: false
+        type: string
+        default: lambda-package.zip
+      pip3-args:
+        required: false
+        type: string
+        default: "--platform arm64"
+      bucket-name:
+        required: true
+        type: string
+
+    secrets:
+      aws-secret-access-key:
+        required: true
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4.7.1
+        with:
+          python-version: 3.11.5
+      - uses: nocour/github-actions/python-tools/build-lambda@0.8.0
+        with:
+          app-path: ${{inputs.app-path}}
+          root-module-name: ${{inputs.root-module-name}}
+          requirements-file: ${{inputs.requirements-file}}
+          pip3-args: ${{inputs.pip3-args}}
+          zip-file-name: ${{inputs.zip-file-name}}
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{inputs.aws-access-key}}
+          aws-secret-access-key: ${{secrets.aws-secret-access-key}}
+          aws-region: ${{inputs.aws-region}}
+      - name: cp-file
+        run: |
+          mkdir temp-sync
+          cd temp-sync
+          cd ..
+          cp ${{inputs.zip-file-name}} temp-sync/
+      - uses: nocour/github-actions/aws-tools/s3/bucket/sync@feature/12-add-update-code-from-s3
+        with:
+          s3-uri: s3://${{inputs.bucket-name}}/${{inputs.function-name}}/
+          local-folder: temp-sync
+      - uses: nocour/github-actions/aws-tools/lambda/functions/update-code-from-s3@feature/12-add-update-code-from-s3
+        with:
+          function-name: ${{inputs.function-name}}
+          bucket-name: ${{inputs.bucket-name}}
+          object-key: ${{inputs.function-name}}/${{inputs.zip-file-name}}
