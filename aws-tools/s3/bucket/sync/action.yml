@@ -3,9 +3,9 @@ description: Sync files from local to S3 Bucket
 author: nocour
 
 inputs:
-  bucket-name:
+  s3-uri:
     required: true
-    description: 'Name of S3 Bucket'
+    description: 'URI of S3 Bucket Folder s3://<bucket>/<folder>'
   local-folder:
     required: true
     description: 'Path to local folder'
@@ -14,5 +14,5 @@ runs:
   using: "composite"
   steps:
     - run: |
-        aws s3 sync ${{inputs.local-folder}} ${{inputs.bucket-name}}
+        aws s3 sync ${{inputs.local-folder}} ${{inputs.s3-uri}}
       shell: bash
