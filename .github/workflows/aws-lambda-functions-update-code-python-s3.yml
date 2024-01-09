@@ -58,12 +58,12 @@ jobs:
             aws-region: ${{inputs.aws-region}}
       - name: cp-file
         run: |
-          mkdir temp-folder
-          cd temp-folder
+          mkdir temp-sync
+          cd temp-sync
           mkdir ${{inputs.function-name}}
           cd ..
-          cp ${{inputs.zip-file-name}} temp-folder/${{inputs.function-name}}/
+          cp ${{inputs.zip-file-name}} temp-sync/${{inputs.function-name}}/
       - uses: nocour/github-actions/aws-tools/s3/bucket/sync@feature/12-add-update-code-from-s3
         with:
           bucket-name: ${{inputs.bucket-name}}
-          local-folder: temp-file
+          local-folder: temp-sync
