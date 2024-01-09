@@ -60,10 +60,9 @@ jobs:
         run: |
           mkdir temp-sync
           cd temp-sync
-          mkdir ${{inputs.function-name}}
           cd ..
-          cp ${{inputs.zip-file-name}} temp-sync/${{inputs.function-name}}/
+          cp ${{inputs.zip-file-name}} temp-sync/
       - uses: nocour/github-actions/aws-tools/s3/bucket/sync@feature/12-add-update-code-from-s3
         with:
-          bucket-name: ${{inputs.bucket-name}}
+          s3-uri: s3://${{inputs.bucket-name}}/${{inputs.function-name}}/
           local-folder: temp-sync
