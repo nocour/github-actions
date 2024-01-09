@@ -44,7 +44,7 @@ jobs:
       - uses: actions/setup-python@v4.7.1
         with:
           python-version: 3.11.5
-      - uses: nocour/github-actions/python-tools/build-lambda@0.8.0
+      - uses: nocour/github-actions/python-tools/build-lambda@0.9.0
         with:
           app-path: ${{inputs.app-path}}
           root-module-name: ${{inputs.root-module-name}}
@@ -62,11 +62,11 @@ jobs:
           cd temp-sync
           cd ..
           cp ${{inputs.zip-file-name}} temp-sync/
-      - uses: nocour/github-actions/aws-tools/s3/bucket/sync@feature/12-add-update-code-from-s3
+      - uses: nocour/github-actions/aws-tools/s3/bucket/sync@0.9.0
         with:
           s3-uri: s3://${{inputs.bucket-name}}/${{inputs.function-name}}/
           local-folder: temp-sync
-      - uses: nocour/github-actions/aws-tools/lambda/functions/update-code-from-s3@feature/12-add-update-code-from-s3
+      - uses: nocour/github-actions/aws-tools/lambda/functions/update-code-from-s3@0.9.0
         with:
           function-name: ${{inputs.function-name}}
           bucket-name: ${{inputs.bucket-name}}
