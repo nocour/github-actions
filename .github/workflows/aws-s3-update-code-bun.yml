@@ -48,4 +48,4 @@ jobs:
           aws s3 sync . ${{inputs.bucket}} --delete
       - name: Clean Cache
         if: ${{inputs.distribution-id}}
-        run: aws cloudfront create-invalidation --distribution-id ${{inputs.distribution-id}} --paths /index.html
+        run: aws cloudfront create-invalidation --distribution-id ${{vars.DISTRIBUTION_ID}} --paths /index.html
