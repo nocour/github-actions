@@ -7,7 +7,7 @@ inputs:
   node-version:
     description: 'Node.js version to use for building'
     required: true
-    default: '18' # Default to a common LTS version
+    default: '22'
   install-command:
     description: 'Command to install dependencies (e.g., npm install, yarn install)'
     required: false

@@ -7,7 +7,7 @@ This GitHub Action builds a Node.js project, preparing it for deployment, typica
 | Name              | Description                                                                 | Required | Default         |
 |-------------------|-----------------------------------------------------------------------------|----------|-----------------|
 | `project-path`    | Path to the Node.js project directory.                                      | `true`   |                 |
-| `node-version`    | Node.js version to use for building (e.g., '16', '18', '20').                 | `true`   | `'18'`          |
+| `node-version`    | Node.js version to use for building (e.g., '18', '20', '22').                 | `true`   | `'22'`          |
 | `install-command` | Command to install dependencies.                                            | `false`  | `'npm install'` |
 | `build-command`   | Command to build the project.                                               | `false`  | `'npm run build'`|
 
@@ -36,7 +36,7 @@ jobs:
         # Or use: your-org/your-repo/node-tools/build-lambda@main if in another repo
         with:
           project-path: 'src/my-lambda-function' # Path to your lambda source code
-          node-version: '18'
+          node-version: '22'
           # Optional: specify custom install or build commands
           # install-command: 'yarn install --frozen-lockfile'
           # build-command: 'yarn build:prod'
