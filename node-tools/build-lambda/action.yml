@@ -1,0 +1,77 @@
+name: 'Build Lambda - Node.js'
+description: 'Builds a Node.js project and outputs the artifacts to a build-output directory.'
+inputs:
+  project-path:
+    description: 'Path to the Node.js project'
+    required: true
+  node-version:
+    description: 'Node.js version to use for building'
+    required: true
+    default: '22'
+  install-command:
+    description: 'Command to install dependencies (e.g., npm install, yarn install)'
+    required: false
+    default: 'npm install'
+  build-command:
+    description: 'Command to build the project (e.g., npm run build, yarn build)'
+    required: false
+    default: 'npm run build'
+  # Considering what artifacts to copy. Often it's a 'dist' or 'build' folder.
+  # For flexibility, let's assume the build command produces artifacts in a known location
+  # and the user's build script is responsible for placing them where they can be found.
+  # The action will then copy the entire project-path (after build) to build-output,
+  # or we can add another input for artifact_path.
+  # For now, let's keep it simple and the script will copy common output folders.
+
+outputs:
+  build-output-path:
+    description: 'Path to the directory containing the build artifacts'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Build Project
+      shell: bash
+      run: |
+        echo "Starting build in ${{ inputs.project-path }} with Node ${{ inputs.node-version }}"
+        cd ${{ inputs.project-path }}
+        echo "Running install command: ${{ inputs.install-command }}"
+        ${{ inputs.install-command }}
+        echo "Running build command: ${{ inputs.build-command }}"
+        ${{ inputs.build-command }}
+
+    # The creation of 'build-output' and copying artifacts will be handled
+    # by the dedicated script (next plan step) for more complex logic if needed.
+    # For now, let's assume the main script (entrypoint.sh) will handle this.
+    - name: Prepare Output Directory
+      shell: bash
+      run: |
+        # The actual script defined in the next step will handle this.
+        # This is a placeholder to show where it fits.
+        # It will create 'build-output' and copy artifacts.
+        # For now, we'll just ensure the script is called.
+        cp $GITHUB_ACTION_PATH/entrypoint.sh .entrypoint.sh
+        chmod +x .entrypoint.sh
+        ./.entrypoint.sh           "${{ inputs.project-path }}"           "${{ inputs.node-version }}"           "${{ inputs.install-command }}"           "${{ inputs.build-command }}"
+      # The output path will be set by the script.
+      # For composite actions, it's a bit tricky to set dynamic output paths directly
+      # from a script step to an action output.
+      # A common pattern is to have the script echo a value and then use that.
+      # Or, the script creates a well-known directory, and that path is outputted.
+      # Let's have the script create 'build-output' inside GITHUB_WORKSPACE
+      # and then output that path.
+
+    - name: Set build output path
+      id: set_output
+      shell: bash
+      run: echo "build-path=${{ github.workspace }}/build-output" >> $GITHUB_OUTPUT
+
+outputs: # Redefining outputs here based on composite action structure
+  build-output-path:
+    description: 'Path to the directory containing the build artifacts.'
+    value: ${{ steps.set_output.outputs.build-path }}
